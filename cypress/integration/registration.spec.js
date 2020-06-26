@@ -17,38 +17,48 @@ context("Registration", () => {
 
         it("submit without any entries", () => {
             cy.get('form').submit();
+            cy.get('input#email').should('have.class', 'erroredFormField');
             cy.get('span').contains('Email is required').should('be.visible');
+            cy.get('input#password').should('have.class', 'erroredFormField');
             cy.get('span').contains('Password is required').should('be.visible');
+            cy.get('input#confirmPassword').should('have.class', 'erroredFormField');
             cy.get('span').contains('Password repeat is required').should('be.visible');
         })
 
         it("submit with invalid email", () => {
-            cy.get('label').contains('E-mail').type('costincometestuser');
+            cy.get('input#email').type('costincometestuser');
             cy.get('form').submit();
+            cy.get('input#email').should('have.class', 'erroredFormField');
             cy.get('span').contains('Invalid e-mail').should('be.visible');
         })
 
         it("submit with short password", () => {
-            cy.get('label').contains('Password').type('passwor');
+            cy.get('input#password').type('passwor');
             cy.get('form').submit();
+            cy.get('input#password').should('have.class', 'erroredFormField');
             cy.get('span').contains('Password must be longer than 8 characters').should('be.visible');
         })
 
         it("submit with non equal passwords", () => {
-            cy.get('label').contains('Password').type('passwor');
-            cy.get('label').contains('Repeat password').type('password');
+            cy.get('input#password').type('passwor');
+            cy.get('input#confirmPassword').type('password');
             cy.get('form').submit();
+            cy.get('input#email').should('have.class', 'erroredFormField');
             cy.get('span').contains('Email is required').should('be.visible');
+            cy.get('input#password').should('have.class', 'erroredFormField');
             cy.get('span').contains('Password must be longer than 8 characters').should('be.visible');
+            cy.get('input#confirmPassword').should('have.class', 'erroredFormField');
             cy.get('span').contains("Doesn't match password").should('be.visible');
         })
 
         it("submit with valid email and non equal passwords", () => {
-            cy.get('label').contains('E-mail').type('costincometestuser@gmail.com');
-            cy.get('label').contains('Password').type('passwor');
-            cy.get('label').contains('Repeat password').type('password');
+            cy.get('input#email').type('costincometestuser@gmail.com');
+            cy.get('input#password').type('passwor');
+            cy.get('input#confirmPassword').type('password');
             cy.get('form').submit();
+            cy.get('input#password').should('have.class', 'erroredFormField');
             cy.get('span').contains('Password must be longer than 8 characters').should('be.visible');
+            cy.get('input#confirmPassword').should('have.class', 'erroredFormField');
             cy.get('span').contains('Doesn\'t match password').should('be.visible');
         })
 
@@ -59,13 +69,14 @@ context("Registration", () => {
                 url: 'api/auth/register'
             }).as('register');
 
-            cy.get('label').contains('E-mail').type('costincometestuser@gmail.com');
-            cy.get('label').contains('Password').type('password');
-            cy.get('label').contains('Repeat password').type('password');
+            cy.get('input#email').type('costincometestuser@gmail.com');
+            cy.get('input#password').type('password');
+            cy.get('input#confirmPassword').type('password');
             cy.get('form').submit();
 
             cy.wait('@register');
 
+            cy.get('input#email').should('have.class', 'erroredFormField');
             cy.get('span').contains('Email already exists').should('be.visible');
         })  
     })

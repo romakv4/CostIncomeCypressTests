@@ -9,8 +9,8 @@ context("Auth redirections", () => {
             });
             cy.reload();
             cy.visit('/authorization');
-            cy.get('label').contains('E-mail').type('costincometestuser@gmail.com');
-            cy.get('label').contains('Password').type('password');
+            cy.get('input#email').type('costincometestuser@gmail.com');
+            cy.get('input#password').type('password');
             cy.get('form').submit();
         })
 

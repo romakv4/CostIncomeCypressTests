@@ -21,21 +21,25 @@ context("Authorization", () => {
 
         it("submit without any entries", () => {
             cy.get('form').submit();
+            cy.get('input#email').should('have.class', 'erroredFormField');
             cy.get('span').contains('Email is required').should('be.visible');
+            cy.get('input#password').should('have.class', 'erroredFormField');
             cy.get('span').contains('Password is required').should('be.visible');
         })
 
         it("submit with valid email and short password", () => {
-            cy.get('label').contains('E-mail').type('costincometestuser@gmail.com');
-            cy.get('label').contains('Password').type('passwor');
+            cy.get('input#email').type('costincometestuser@gmail.com');
+            cy.get('input#password').type('passwor');
             cy.get('form').submit();
+            cy.get('input#password').should('have.class', 'erroredFormField');
             cy.get('span').contains('Password must be longer than 8 characters').should('be.visible');
         })
 
         it("submit with invalid email and valid password", () => {
-            cy.get('label').contains('E-mail').type('costincometestuser');
-            cy.get('label').contains('Password').type('password');
+            cy.get('input#email').type('costincometestuser');
+            cy.get('input#password').type('password');
             cy.get('form').submit();
+            cy.get('input#email').should('have.class', 'erroredFormField');
             cy.get('span').contains('Invalid e-mail').should('be.visible');
         })
 
@@ -44,8 +48,8 @@ context("Authorization", () => {
     describe("Authorization with valid data", () => {
         it("login logout", () => {
             cy.visit('/authorization');
-            cy.get('label').contains('E-mail').type('costincometestuser@gmail.com');
-            cy.get('label').contains('Password').type('password');
+            cy.get('input#email').type('costincometestuser@gmail.com');
+            cy.get('input#password').type('password');
             cy.get('form').submit();
             cy.location('pathname').should('eq', '/home').should(() => {
                 expect(
