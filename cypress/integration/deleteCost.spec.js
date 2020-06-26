@@ -19,21 +19,20 @@ context("Delete cost", () => {
                 sessionStorage.getItem('token')
             ).to.be.a('string');
         });
-        cy.get('button').contains('Add cost').should('be.visible').click();
+        cy.get('[data-cy="add-cost"]').should('be.visible').click();
         cy.get('input#category').type('Food');
         cy.get('input#price').type(100);
         cy.get('input#date').type('2020-06-25');
         cy.get('form').submit();
         cy.get('span').contains('Success! The form has been reset.').should('be.visible');
-        cy.get('.material-icons').click();
+        cy.get('[data-cy="back"]').click();
         cy.location('pathname').should('eq', '/costs');
-        cy.get('td > i').contains('delete').should('be.visible').click();
+        cy.get('[data-cy="delete"]').should('be.visible').click();
         cy.location('pathname').should('eq', '/home');
-        cy.get('button').contains('Add cost').should('be.visible');
+        cy.get('[data-cy="add-cost"]').should('be.visible');
     })
 
-    //skipped because fails
-    it.skip("Delete multiple costs", () => {
+    it("Delete multiple costs", () => {
         cy.visit('/authorization');
         cy.get('input#email').type('costincometestuser@gmail.com');
         cy.get('input#password').type('password');
@@ -43,22 +42,33 @@ context("Delete cost", () => {
                 sessionStorage.getItem('token')
             ).to.be.a('string');
         });
-        cy.get('button').contains('Add cost').should('be.visible').click();
+        cy.get('[data-cy="add-cost"]').should('be.visible').click();
         
-        cy.wrap([1,2,3]).each(() => {
-            cy.get('input#category').type('Food');
-            cy.get('input#price').type('{selectall}100');
-            cy.get('input#date').type('2020-06-25');
-            cy.get('form').submit();
-            cy.get('span').contains('Success! The form has been reset.').should('be.visible');
-        });
+        cy.get('input#category').type('Food');
+        cy.get('input#price').type('{selectall}100');
+        cy.get('input#date').type('2020-06-25');
+        cy.get('form').submit();
+        cy.get('span').contains('Success! The form has been reset.').should('be.visible');
+
+        cy.get('input#category').type('Alcohol');
+        cy.get('input#price').type('{selectall}100');
+        cy.get('input#date').type('2020-06-25');
+        cy.get('form').submit();
+        cy.get('span').contains('Success! The form has been reset.').should('be.visible');
+
+        cy.get('input#category').type('Tools');
+        cy.get('input#description').type('Screwdriver');
+        cy.get('input#price').type('{selectall}100');
+        cy.get('input#date').type('2020-06-25');
+        cy.get('form').submit();
+        cy.get('span').contains('Success! The form has been reset.').should('be.visible');
         
-        cy.get('.material-icons').click();
+        cy.get('[data-cy="back"]').click();
         cy.location('pathname').should('eq', '/costs');
 
-        cy.get('table > tr > td > i').contains('delete').click();
-        cy.get('table > tr > td > i').contains('delete').click();
-        cy.get('table > tr > td > i').contains('delete').click();
+        cy.get('i[data-cy="delete"]').each((elem, index, list) => {
+            elem.click();
+        });
     })
 
 })
