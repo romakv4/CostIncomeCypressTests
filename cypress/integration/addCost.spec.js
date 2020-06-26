@@ -22,6 +22,7 @@ context("Add new cost", () => {
             });
             cy.get('[data-cy="add-cost"]').should('be.visible').click();
             cy.get('form').submit();
+            cy.get('input#category').should('have.class', 'erroredFormField');
             cy.get('span').contains('Category is required');
         })
 
@@ -39,9 +40,12 @@ context("Add new cost", () => {
             cy.get('input#price').type('{selectall}{del}');
             cy.get('input#date').type('{selectall}{del}');
             cy.get('form').submit();
+            cy.get('input#category').should('have.class', 'erroredFormField');
             cy.get('span').contains('Category is required');
             cy.get('input#description').should('have.class', 'validFormField');
+            cy.get('input#price').should('have.class', 'erroredFormField');
             cy.get('span').contains('Price is required');
+            cy.get('input#date').should('have.class', 'erroredFormField');
             cy.get('span').contains('Date is required');
         })
 
@@ -61,8 +65,11 @@ context("Add new cost", () => {
             cy.get('input#price').type('{selectall}1000000000000');
             cy.get('input#date').type('2020-06-25');
             cy.get('form').submit();
+            cy.get('input#category').should('have.class', 'erroredFormField');
             cy.get('span').contains('Category must be shorter than 20 characters');
+            cy.get('input#description').should('have.class', 'erroredFormField');
             cy.get('span').contains('Description must be shorter than 20 characters');
+            cy.get('input#price').should('have.class', 'erroredFormField');
             cy.get('span').contains('Are you serious?');
         })
 
@@ -82,6 +89,7 @@ context("Add new cost", () => {
             cy.get('input#price').type('{selectall}0.009');
             cy.get('input#date').type('2020-06-25');
             cy.get('form').submit();
+            cy.get('input#price').should('have.class', 'erroredFormField');
             cy.get('span').contains('Price must be greater than 0.01');
         })
     })
